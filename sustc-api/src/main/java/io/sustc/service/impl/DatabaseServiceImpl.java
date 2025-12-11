@@ -275,7 +275,8 @@ public class DatabaseServiceImpl implements DatabaseService {
                 // 必须创建索引，否则 Benchmark 会超时
                 "CREATE INDEX IF NOT EXISTS idx_recipes_cat_rating ON recipes(category, aggregated_rating DESC)",
                 "CREATE INDEX IF NOT EXISTS idx_recipes_cat_cal ON recipes(category, calories ASC)",
-                "CREATE INDEX IF NOT EXISTS idx_ingredients_lookup ON recipe_ingredients(recipe_id, display_order)"
+                "CREATE INDEX IF NOT EXISTS idx_ingredients_lookup ON recipe_ingredients(recipe_id, display_order)",
+                "CREATE INDEX IF NOT EXISTS idx_recipes_calories ON recipes(calories)"
         };
 
         for (String sql : sqls) {

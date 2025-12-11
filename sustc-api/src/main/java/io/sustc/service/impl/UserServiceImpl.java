@@ -329,7 +329,7 @@ public class UserServiceImpl implements UserService {
                         .name(rs.getString("recipe_name"))
                         .authorId(rs.getLong("author_id"))
                         .authorName(rs.getString("author_name"))
-                        .datePublished(rs.getTimestamp("date_published").toInstant())
+                        .datePublished(rs.getTimestamp("date_published", java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"))).toInstant())
                         .aggregatedRating(rs.getDouble("aggregated_rating"))
                         .reviewCount(rs.getInt("review_count"))
                         .build(),
