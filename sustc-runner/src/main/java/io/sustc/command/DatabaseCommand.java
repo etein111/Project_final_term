@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
@@ -380,6 +381,5 @@ public class DatabaseCommand {
 
         log.info("serialize path {}", file);
     }
-
 
 }

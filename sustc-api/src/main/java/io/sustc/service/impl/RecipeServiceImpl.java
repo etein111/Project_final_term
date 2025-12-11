@@ -44,9 +44,9 @@ public class RecipeServiceImpl implements RecipeService {
 
         // JOIN users 表以获取 author_name (因为我们遵循了 3NF，去除了 recipes 表里的 author_name 冗余)
         String sql = "SELECT r.*, u.name as author_name " +
-                     "FROM recipes r " +
-                     "JOIN users u ON r.author_id = u.id " +
-                     "WHERE r.id = ? AND r.is_deleted = FALSE";
+                "FROM recipes r " +
+                "JOIN users u ON r.author_id = u.id " +
+                "WHERE r.id = ? AND r.is_deleted = FALSE";
 
         try {
             RecipeRecord record = jdbcTemplate.queryForObject(sql, new RecipeRowMapper(), recipeId);
@@ -143,7 +143,7 @@ public class RecipeServiceImpl implements RecipeService {
     public long createRecipe(RecipeRecord dto, AuthInfo auth) {
         // 1. 验证用户
         checkAuth(auth);
-        
+
         // 2. 验证输入
         if (dto.getName() == null || dto.getName().isEmpty()) {
             throw new IllegalArgumentException("Recipe name cannot be empty.");
@@ -160,7 +160,7 @@ public class RecipeServiceImpl implements RecipeService {
                 "carbohydrate_content, fiber_content, sugar_content, protein_content, " +
                 "servings, yield, is_deleted) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+
         int cookSec = parseDuration(dto.getCookTime());
         int prepSec = parseDuration(dto.getPrepTime());
 
@@ -265,13 +265,13 @@ public class RecipeServiceImpl implements RecipeService {
         // 全SQL计算，利用自连接 (Self-Join)
         // r1.id < r2.id 避免重复和自身比较
         String sql = "SELECT r1.id as id1, r2.id as id2, r1.calories as cal1, r2.calories as cal2, " +
-                     "ABS(r1.calories - r2.calories) as diff " +
-                     "FROM recipes r1 " +
-                     "JOIN recipes r2 ON r1.id < r2.id " +
-                     "WHERE r1.is_deleted = FALSE AND r2.is_deleted = FALSE " +
-                     "AND r1.calories IS NOT NULL AND r2.calories IS NOT NULL " +
-                     "ORDER BY diff ASC, r1.id ASC, r2.id ASC " +
-                     "LIMIT 1";
+                "ABS(r1.calories - r2.calories) as diff " +
+                "FROM recipes r1 " +
+                "JOIN recipes r2 ON r1.id < r2.id " +
+                "WHERE r1.is_deleted = FALSE AND r2.is_deleted = FALSE " +
+                "AND r1.calories IS NOT NULL AND r2.calories IS NOT NULL " +
+                "ORDER BY diff ASC, r1.id ASC, r2.id ASC " +
+                "LIMIT 1";
 
         try {
             return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
@@ -292,12 +292,12 @@ public class RecipeServiceImpl implements RecipeService {
     public List<Map<String, Object>> getTop3MostComplexRecipesByIngredients() {
         // 分组统计
         String sql = "SELECT r.id, r.name, COUNT(ri.id) as cnt " +
-                     "FROM recipes r " +
-                     "JOIN recipe_ingredients ri ON r.id = ri.recipe_id " +
-                     "WHERE r.is_deleted = FALSE " +
-                     "GROUP BY r.id, r.name " +
-                     "ORDER BY cnt DESC, r.id ASC " +
-                     "LIMIT 3";
+                "FROM recipes r " +
+                "JOIN recipe_ingredients ri ON r.id = ri.recipe_id " +
+                "WHERE r.is_deleted = FALSE " +
+                "GROUP BY r.id, r.name " +
+                "ORDER BY cnt DESC, r.id ASC " +
+                "LIMIT 3";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Map<String, Object> map = new LinkedHashMap<>();
@@ -383,7 +383,7 @@ public class RecipeServiceImpl implements RecipeService {
             r.setDatePublished(rs.getTimestamp("date_published"));
             r.setAggregatedRating(rs.getFloat("aggregated_rating"));
             // 注意：float 转 Float，如果 SQL 是 NULL，rs.getFloat 返回 0.0，需要判断 wasNull
-            if (rs.wasNull()) r.setAggregatedRating(0); // 
+            if (rs.wasNull()) r.setAggregatedRating(0); //
             r.setReviewCount(rs.getInt("review_count"));
             r.setCalories(rs.getFloat("calories"));
             r.setFatContent(rs.getFloat("fat_content"));

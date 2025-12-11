@@ -8,6 +8,6 @@ services:
     volumes:
       - ./data/postgresql:/bitnami/postgresql
     environment:
-      - POSTGRESQL_USERNAME=postgres
-      - POSTGRESQL_PASSWORD=123456
+      - POSTGRESQL_USERNAME=sustc
+      - POSTGRESQL_PASSWORD=sustc
       - POSTGRESQL_DATABASE=sustc
